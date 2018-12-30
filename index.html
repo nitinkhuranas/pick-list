@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Pick List</title>
+		<script src='http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.js'></script>
+		<script src='./myController.js'></script>
+		<link rel="stylesheet" href="./styles.css">
+	</head>
+	<body>
+        <div ng-app='myApp'>
+            <div ng-controller='MyController'>
+                <div class="flex-container">
+                    <div class="ungrouped-items">
+                        <div ng-repeat="item in ungroupedItems">
+                            <input type="checkbox" ng-model="item.isSelected">
+                            <span>{{item.name}}</span>
+                        </div>
+                    </div>
+        
+                    <div class="btn-grps">
+                        <button class="move-left" ng-click="moveLeft()">&LeftAngleBracket;&LeftAngleBracket;</button>
+                        <button class="move-right" ng-click="moveRight()">&RightAngleBracket;&RightAngleBracket;</button>     
+                    </div>
+        
+                    <div class="groupes">
+                        <div>
+                            <input type="text" ng-model="newGroupName"/>
+                            <button ng-click="createGroup()">Create group</button>
+                        </div>
+                        <div ng-repeat="group in groups">
+                            <input type="radio" name="group" ng-value="{{$index}}" ng-model="selectedGroupIndex">
+                            <span>{{group.name}}</span>
+                            <div class="grouped-items" ng-repeat="item in group.items">
+                                    <input type="checkbox" ng-model="item.isSelected">
+                                    <span>{{item.name}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</body>
+</html>
