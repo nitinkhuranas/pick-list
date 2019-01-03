@@ -1,69 +1,25 @@
-var app = angular.module('myApp', []);
-
-app.service('Data', function(){
-    var groups =  [
-        {
-            name: "group1",
-            items: [
-                {
-                    name:  "item1",
-                },
-                {
-                    name:  "item2",
-                },
-                {
-                    name:  "item3",
-                },
-            ],
-        },
-        {
-            name: "group2",
-            items: [
-                {
-                    name:  "item4",
-                },
-                {
-                    name:  "item5",
-                },
-                {
-                    name:  "item6",
-                },
-                {
-                    name:  "item7",
-                },
-            ],
-        }, 
-    ];
-
-    var ungroupedItems = [
-        {
-            name:  "item8",
-        },
-        {
-            name:  "item9",
-        },
-        {
-            name:  "item10",
-        },
-    ]
-
-    return {
-        groups: groups,
-        ungroupedItems: ungroupedItems,
-    }
-});
-
 app.controller('MyController', function($scope, Data) {
     $scope.groups = Data.groups;
     $scope.ungroupedItems = Data.ungroupedItems;
     
     $scope.selectedGroupIndex = 0;
+    $scope.selectedGroup = $scope.groups[0];
 
     $scope.moveRight = function(){
-        var selectedGroup = $scope.groups[$scope.selectedGroupIndex]
+        var selectedGroup = $scope.selectedGroup;
+        if(!selectedGroup){
+            alert("Please select some group");
+            return;
+        }
+
         var selectedItems = $scope.ungroupedItems.filter(function(item){
             return item.isSelected;
         });
+
+        if(selectedItems.length === 0){
+            alert("Please select atleast one item");
+            return;
+        }
 
         $scope.ungroupedItems = $scope.ungroupedItems.filter(function(item){
             return !item.isSelected;
@@ -77,10 +33,19 @@ app.controller('MyController', function($scope, Data) {
     }
 
     $scope.moveLeft = function(){
-        var selectedGroup = $scope.groups[$scope.selectedGroupIndex]
+        var selectedGroup = $scope.selectedGroup;
+        if(!selectedGroup){
+            alert("Please select some group");
+            return;
+        }
         var selectedItems = selectedGroup.items.filter(function(item){
             return item.isSelected;
         });
+
+        if(selectedItems.length === 0){
+            alert("Please select atleast one item");
+            return;
+        }
 
         selectedGroup.items = selectedGroup.items.filter(function(item){
             return !item.isSelected;
@@ -104,7 +69,7 @@ app.controller('MyController', function($scope, Data) {
 
     $scope.createGroup = function(){
         if(findIndex($scope.groups, 'name', $scope.newGroupName) >= 0){
-            console.log("name already exists")
+            alert("Group with name " + $scope.newGroupName  + " already exists")
             return;
         }
 
@@ -112,6 +77,10 @@ app.controller('MyController', function($scope, Data) {
             name: $scope.newGroupName,
             items: []
         });
+    }
+
+    $scope.toggleIsActive= function($scope){
+        $scope.isActive = $scope.isActive ? false: true;
     }
 
 });
